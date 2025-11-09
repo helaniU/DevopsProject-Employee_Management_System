@@ -17,7 +17,9 @@ export default function AdminDashboard() {
     <div className="min-h-screen bg-[#d9d9d9]">
       <AdminNavbar />
       <div className="p-8 max-w-7xl mx-auto">
-        <h1 className="text-3xl font-bold mb-2 text-[#0e2f44]">Admin Dashboard</h1>
+        <h1 className="text-3xl font-bold mb-2 text-[#0e2f44]">
+          🧑‍💻 Admin Dashboard
+        </h1>
         <p className="mb-6 text-[#407294] font-bold">Welcome, {currentUser?.name}</p>
 
         {/* Stats */}
@@ -60,12 +62,16 @@ export default function AdminDashboard() {
             Salary Management
           </div>
           <div
-            onClick={() => navigate("/leave")}
+            onClick={() => navigate("/leavelist")}
             className="bg-[#c9af9c] text-[#0e2f44] rounded-xl p-6 text-center font-semibold hover:bg-[#bc9e89] hover:text-white transition cursor-pointer shadow-md"
           >
             Leave Management
           </div>
         </div>
+        {/* Footer Note */}
+        <p className="mt-20 text-center text-sm text-gray-500">
+          © {new Date().getFullYear()} EMS Admin Panel. All rights reserved.
+        </p>
       </div>
     </div>
   );

@@ -18,7 +18,7 @@ export default function SalaryForm({ employees, record, onSubmit, onClose }) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center">
+    <div className="fixed inset-0 bg-opacity-30 flex items-center justify-center">
       <div className="bg-white p-6 rounded-xl shadow-lg w-full max-w-md">
         <h2 className="text-xl font-bold mb-4">{record ? "Edit Salary" : "Add Salary"}</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -57,7 +57,7 @@ export default function SalaryForm({ employees, record, onSubmit, onClose }) {
             </button>
             <button
               type="submit"
-              className="px-4 py-2 rounded bg-blue-600 text-white transition"
+              className="px-4 py-2 rounded bg-[#0e2f44] text-white transition"
             >
               {record ? "Update" : "Add"}
             </button>

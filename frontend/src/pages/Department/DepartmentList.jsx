@@ -57,10 +57,10 @@ export default function DepartmentList() {
       <Navbar />
       <div className="p-8 bg-[#d9d9d9] min-h-screen">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold text-[#0e2f44]">Department Management</h1>
+          <h1 className="text-3xl font-bold text-[#0e2f44]">🏢 Department Management</h1>
           <button
             onClick={() => setIsFormOpen(true)}
-            className="bg-[#0e2f44] text-white px-4 py-2 rounded-lg transition"
+            className="bg-[#0e2f44] text-white px-4 py-2 rounded-lg hover:bg-[#144868] transition"
           >
             + Add Department
           </button>
@@ -109,13 +109,13 @@ export default function DepartmentList() {
                 <td className="p-3 space-x-2">
                   <button
                     onClick={() => handleEdit(dept)}
-                    className="bg-yellow-400 text-white px-3 py-1 rounded transition"
+                    className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-400 transition"
                   >
                     Edit
                   </button>
                   <button
                     onClick={() => handleDelete(dept.id)}
-                    className="bg-red-500 text-white px-3 py-1 rounded transition"
+                    className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-500 transition"
                   >
                     Delete
                   </button>
@@ -125,6 +125,10 @@ export default function DepartmentList() {
           </tbody>
         </table>
       </div>
+      <footer className="text-gray-600 py-5 text-center text-sm">
+        © {new Date().getFullYear()} EMS Admin Panel — Department Overview
+      </footer>
+
     </div>
   );
 }

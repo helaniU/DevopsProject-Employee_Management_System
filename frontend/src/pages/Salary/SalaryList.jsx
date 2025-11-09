@@ -45,12 +45,12 @@ export default function SalaryList() {
   return (
     <div>
       <Navbar />
-      <div className="p-8 bg-gray-100 min-h-screen">
+      <div className="p-8 bg-[#d9d9d9] min-h-screen">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold">Salary Management</h1>
+          <h1 className="text-3xl font-bold text-[#0e2f44]">💰 Salary Management</h1>
           <button
             onClick={() => setIsFormOpen(true)}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg transition"
+            className="bg-[#0e2f44] text-white px-4 py-2 rounded-lg hover:bg-[#144868] transition"
           >
             + Add Salary
           </button>
@@ -66,7 +66,7 @@ export default function SalaryList() {
         )}
 
         <table className="w-full bg-white rounded-xl shadow overflow-hidden">
-          <thead className="bg-blue-600 text-white">
+          <thead className="bg-[#0e2f44] text-white">
             <tr>
               <th className="p-3 text-left">Employee Name</th>
               <th className="p-3 text-left">Department</th>
@@ -99,6 +99,10 @@ export default function SalaryList() {
           </tbody>
         </table>
       </div>
+      <footer className="text-gray-600 py-5 text-center text-sm">
+        © {new Date().getFullYear()} EMS Admin Panel — Salary Management
+      </footer>
     </div>
+    
   );
 }

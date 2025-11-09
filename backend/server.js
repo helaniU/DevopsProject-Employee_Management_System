@@ -1,29 +1,30 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
-const EMS_DBmodel2 = require ("./models/Employee.js"); // updated import
-const EMS_DBmodel3 = require("./models/Department.js");
+import express from "express";
+import dotenv from "dotenv";
+import cors from "cors";
+import connectDB from "./config/db.js";
+import userRoutes from "./routes/userRoutes.js";
+import employeeRoutes from "./routes/employeeRoutes.js";
+import noticeRoutes from "./routes/noticeRoutes.js";
+import departmentRoutes from "./routes/departmentRoutes.js";
 
+dotenv.config();
+connectDB();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
-
-// Middleware
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ limit: "10mb", extended: true }));
+app.use("/uploads", express.static("uploads"));
 
-// Connect MongoDB
-mongoose.connect("mongodb://localhost:27017/EMS_DB")
-  .then(() => {
-    console.log("✅ MongoDB Connected");
-  })
-  .catch((err) => console.log(err));
 
-// Routes
-const employeeRoutes = require("./routes/employee"); // adjust path if different
-const departmentRoutes = require("./routes/department"); // adjust path if different
+// API Routes
+app.use("/api/users", userRoutes);
 app.use("/api/employees", employeeRoutes);
+app.use("/api/notices", noticeRoutes);
 app.use("/api/departments", departmentRoutes);
 
-
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.get("/", (req, res) => {
+  res.send("Backend is running!✅");
+});
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));

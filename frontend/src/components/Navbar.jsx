@@ -7,19 +7,10 @@ export default function Navbar({ role }) {
 
   const handleLogout = () => {
     localStorage.removeItem("currentUser");
-    navigate("/login");
+    navigate("/");
   };
-
-  const links =
-    role === "admin"
-      ? [
-          { name: "Dashboard", path: "/dashboard/admins" },
-          { name: "Employees", path: "/employees" },
-          { name: "Departments", path: "/departments" },
-          { name: "Salary", path: "/salary" },
-          { name: "Leave", path: "/leave" },
-        ]
-      : [
+  
+  const links = [
           { name: "Dashboard", path: "/dashboard/employees" },
           { name: "My Profile", path: "/profile" },
           { name: "My Salary", path: "/salary" },
@@ -27,50 +18,60 @@ export default function Navbar({ role }) {
         ];
 
   return (
-    <nav className="bg-blue-600 text-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
-        <NavLink
-          to={role === "admin" ? "/dashboard/admins" : "/dashboard/employees"}
-          className="text-xl font-bold"
-          style={{ color: "white", fontSize: 40 }}
-        >
-          EMS
-        </NavLink>
-
-        <div className="hidden md:flex space-x-6 items-center">
-          {links.map((link) => (
-            <NavLink
-              key={link.name}
-              to={link.path}
-              className={({ isActive }) =>
-                isActive ? "underline font-semibold" : "hover:underline"
-              }
-            >
-              {link.name}
-            </NavLink>
-          ))}
-          <button
-            onClick={handleLogout}
-            className="ml-4 bg-red-500 px-3 py-1 rounded hover:bg-red-600 transition"
-          >
-            Logout
-          </button>
-        </div>
-
-        <button className="md:hidden" onClick={() => setIsOpen(!isOpen)}>
-          ☰
-        </button>
+    <header className="w-full flex items-center justify-between px-6 py-3 bg-[#0e2f44] shadow-md">
+      {/* Left side: Logo + Title */}
+      <div className="flex items-center gap-3">
+        <img
+          src="/EMSlogo.png"
+          className="w-10 h-10 object-contain bg-white rounded-xl"
+          alt="EMS Logo"
+        />
+        <h1 className="text-2xl md:text-4xl font-bold text-white">EMS</h1>
       </div>
 
+      {/* Desktop Navigation */}
+      <nav className="hidden md:flex space-x-6 items-center text-white">
+        {links.map((link) => (
+          <NavLink
+            key={link.name}
+            to={link.path}
+            className={({ isActive }) =>
+              isActive
+                ? "font-semibold border-b-2 border-white pb-1"
+                : "font-medium hover:text-[#cbbeb5] transition"
+            }
+          >
+            {link.name}
+          </NavLink>
+        ))}
+        <button
+          onClick={handleLogout}
+          className="ml-4 bg-red-500 px-3 py-1 rounded-md transition hover:bg-red-600"
+        >
+          Logout
+        </button>
+      </nav>
+
+      {/* Mobile Menu Toggle */}
+      <button
+        className="md:hidden text-white text-2xl"
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        ☰
+      </button>
+
+      {/* Mobile Menu */}
       {isOpen && (
-        <div className="md:hidden bg-blue-500 flex flex-col space-y-2 p-4">
+        <div className="absolute top-16 left-0 w-full bg-[#0e2f44] text-white flex flex-col space-y-3 p-4 shadow-md md:hidden">
           {links.map((link) => (
             <NavLink
               key={link.name}
               to={link.path}
               onClick={() => setIsOpen(false)}
               className={({ isActive }) =>
-                isActive ? "underline font-semibold" : ""
+                isActive
+                  ? "font-semibold border-l-4 border-white pl-2"
+                  : "font-medium hover:text-[#cbbeb5] transition pl-2"
               }
             >
               {link.name}
@@ -81,12 +82,12 @@ export default function Navbar({ role }) {
               setIsOpen(false);
               handleLogout();
             }}
-            className="mt-2 bg-red-500 px-3 py-1 rounded hover:bg-red-600 transition"
+            className="mt-2 bg-red-500 px-3 py-1 rounded-md transition hover:bg-red-600"
           >
             Logout
           </button>
         </div>
       )}
-    </nav>
+    </header>
   );
 }

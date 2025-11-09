@@ -14,6 +14,9 @@ import SalaryList from "./pages/Salary/SalaryList";
 import AdminProfile from "./pages/AdminProfile";
 import AdminList from "./pages/AdminList";
 import StartingPage from "./pages/Auth/StartingPage";
+import LeaveList from "./pages/Leave/LeaveList";
+import NoticeList from "./pages/Notices/NoticeList";
+
 
 function App() {
   return (
@@ -30,9 +33,10 @@ function App() {
   <Route path="/employees" element={<ProtectedRoute role="admin"><EmployeeList /></ProtectedRoute>} />
   <Route path="/departments" element={<ProtectedRoute role="admin"><DepartmentList /></ProtectedRoute>} />
   <Route path="/salarylist" element={<ProtectedRoute role="admin"><SalaryList /></ProtectedRoute>} />
+  <Route path="/leavelist" element={<ProtectedRoute role="admin"><LeaveList /></ProtectedRoute>} />
+  <Route path="/noticelist" element={<ProtectedRoute role="admin"><NoticeList /></ProtectedRoute>} />
   <Route path="/adminlist" element={<ProtectedRoute role="admin"><AdminList /></ProtectedRoute>} />
-  {/* <Route path="/notices/manage" element={<ProtectedRoute role="admin"><NoticeManagement /></ProtectedRoute>} /> */}
-
+  
   {/* Employee */}
   <Route path="/dashboard/employees" element={<ProtectedRoute role="employee"><EmployeeDashboard /></ProtectedRoute>} />
   <Route path="/profile" element={<ProtectedRoute role="employee"><Profile /></ProtectedRoute>} />
