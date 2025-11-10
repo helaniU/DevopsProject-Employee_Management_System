@@ -1,46 +1,39 @@
 pipeline {
     agent any
 
-    environment {
-        COMPOSE_FILE = "docker-compose.yml"
-    }
-
     stages {
-        stage('Checkout') {
+        stage('Clone Repository') {
             steps {
-                git branch: 'main', url: 'https://github.com/helaniU/EMS_Devops_Project.git'
+                git 'https://github.com/helaniU/EMS_Devops_Project.git',
+                credentialsId: 'github-token'
             }
         }
 
-        stage('Build Docker Images') {
+        stage('Build Containers') {
             steps {
-                sh 'docker-compose -f $COMPOSE_FILE build'
+                sh 'docker-compose build'
             }
         }
 
         stage('Run Containers') {
             steps {
-                sh 'docker-compose -f $COMPOSE_FILE up -d'
+                sh 'docker-compose up -d'
             }
         }
 
-        stage('Test') {
+        stage('Verify') {
             steps {
-                echo 'Optional: run tests here'
-            }
-        }
-
-        stage('Cleanup') {
-            steps {
-                echo 'Optional: stop containers after test'
-                sh 'docker-compose -f $COMPOSE_FILE down'
+                sh 'docker ps -a'
             }
         }
     }
 
     post {
-        always {
-            echo 'Pipeline finished'
+        success {
+            echo '✅ Build and deployment successful!'
+        }
+        failure {
+            echo '❌ Build failed!'
         }
     }
 }
