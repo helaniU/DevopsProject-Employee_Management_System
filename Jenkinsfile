@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                git 'https://github.com/helaniU/EMS_Devops_Project.git',
+                git branch: 'main', url: 'https://github.com/helaniU/EMS_Devops_Project.git',
                 credentialsId: 'github-token'
             }
         }
