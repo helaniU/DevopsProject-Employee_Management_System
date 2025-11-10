@@ -1,6 +1,5 @@
 import express from "express";
 import User from "../models/User.js";
-
 const router = express.Router();
 
 // Signup route
@@ -61,6 +60,32 @@ router.post("/login", async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
+
+// Get current user profile
+router.get("/me", async (req, res) => {
+  try {
+    const { email } = req.query;
+    if (!email) {
+      return res.status(400).json({ message: "Email is required" });
+    }
+
+    console.log('Searching for user profile with email:', email);
+    const user = await User.findOne({ email });
+    
+    if (!user) {
+      console.log('No user found with email:', email);
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    console.log('Found user profile:', { email: user.email, name: user.name, role: user.role });
+    res.json(user);
+  } catch (err) {
+    console.error('Server error:', err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+
 
 
 export default router;

@@ -1,0 +1,31 @@
+services:
+  mongo:
+    image: mongo
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  backend:
+    build: ./backend
+    container_name: backend
+    restart: always
+    ports:
+      - "5000:5000"
+    environment:
+      - MONGO_URL=mongodb://mongo:27017/EMS_DB
+    depends_on:
+      - mongo
+
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    restart: always
+    ports:
+      - "5333:80"  # serve React app on localhost:5333
+    depends_on:
+      - backend
+
+volumes:
+  mongo-data:

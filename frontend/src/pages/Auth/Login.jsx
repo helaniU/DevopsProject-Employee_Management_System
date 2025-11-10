@@ -29,23 +29,28 @@ export default function Login() {
         email: formData.email,
         password: formData.password,
       });
+        const userData = res.data.user; // ✅ adjust if your backend sends { user: {...} }
+  if (!userData) throw new Error("Invalid login");
 
-      const userData = res.data.user; // adjust according to your backend response
-      if (!userData) throw new Error("Invalid login");
+  // ✅ Validate selected role
+  if (userData.role !== formData.role) {
+    throw new Error(`Incorrect role selected. Your account is "${userData.role}"`);
+  }
 
-      if (userData.role !== formData.role) {
-        throw new Error(
-          `Incorrect role selected. Your account is "${userData.role}"`
-        );
-      }
-      // Save user data in localStorage
-      localStorage.setItem("currentUser", JSON.stringify(userData));
+  // Example in your Login.jsx after successful login
+  localStorage.setItem("user", JSON.stringify(res.data.user));
 
+  // ✅ Save user data in localStorage
+  localStorage.setItem("currentUser", JSON.stringify(userData));
+
+  // ✅ Save user email for profile fetching
+  localStorage.setItem("currentUserEmail", userData.email);
+  
       // Navigate based on role
       if (userData.role === "admin") {
         navigate("/dashboard/admins");
       } else {
-        navigate("/dashboard/employee");
+        navigate("/dashboard/employees");
       }
     } catch (error) {
       alert(
@@ -93,7 +98,7 @@ export default function Login() {
       <div className="flex-grow flex items-center justify-center p-5 py-5">
         <div className="bg-white rounded-2xl shadow-2xl w-[400px] px-10 py-5">
           <h2 className="text-3xl font-bold text-[#0e2f44] mb-5 text-center">
-            Login
+            EMS Login
           </h2>
 
           <form className="space-y-4" onSubmit={handleSubmit}>

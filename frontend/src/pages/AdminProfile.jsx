@@ -1,33 +1,55 @@
 import { useState, useEffect, useRef } from "react";
 import Navbar from "../components/AdminNavbar";
+import axios from "axios";
 
 export default function AdminProfile() {
-  const [profile, setProfile] = useState({
-    name: "Admin Name",
-    email: "admin@example.com",
-    department: "",
-    birthday: "",
-    position: "Administrator",
-    gender: "",
-    married: false,
-    salary: "",
-    image: "",
-    phone: "",
-    role: "admin"
-  });
-
+  const [profile, setProfile] = useState(null); // start empty
   const [isEditing, setIsEditing] = useState(false);
   const [showMessage, setShowMessage] = useState(false);
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState("success");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   const fileInputRef = useRef(null);
 
-  // Load profile from localStorage or set defaults
-  useEffect(() => {
-    const userData = JSON.parse(localStorage.getItem("currentUser"));
-    if (userData) setProfile(userData);
-    else localStorage.setItem("currentUser", JSON.stringify(profile));
-  }, []);
+  // Fetch profile from database
+useEffect(() => {
+  const fetchUserProfile = async () => {
+    try {
+      const currentUserEmail = localStorage.getItem("currentUserEmail"); // make sure this is set at login
+      if (!currentUserEmail) {
+        setError("No logged-in user found. Please log in again.");
+        setLoading(false);
+        return;
+      }
+
+      console.log('Fetching profile with email:', currentUserEmail);
+      const res = await axios.get(`http://localhost:5000/api/users/me`, {
+        params: {
+          email: currentUserEmail
+        }
+      });
+      console.log("Profile response:", res.data);
+
+      if (!res.data) {
+        setError("No profile data received from server.");
+        setLoading(false);
+        return;
+      }
+
+      setProfile(res.data);
+      setLoading(false);
+    } catch (err) {
+      console.error("Profile fetch error:", err.response?.data || err.message);
+      setError(err.response?.data?.message || "Failed to fetch user profile from server. Please try again.");
+      setLoading(false);
+    }
+  };
+
+  fetchUserProfile();
+}, []);
+
 
   const showMessageWithTimeout = (msg, type = "success", timeout = 3000) => {
     setMessage(msg);
@@ -53,18 +75,40 @@ export default function AdminProfile() {
     }
   };
 
-  const handleSaveProfile = () => {
-    localStorage.setItem("currentUser", JSON.stringify(profile));
-    showMessageWithTimeout("Profile updated successfully! ✅", "success");
-    setIsEditing(false);
+  const handleSaveProfile = async () => {
+    try {
+      const currentUserEmail = localStorage.getItem("currentUserEmail");
+      if (!currentUserEmail) {
+        showMessageWithTimeout("User not logged in", "error");
+        return;
+      }
+
+      // Update profile in the database
+      await axios.put(`http://localhost:5000/api/users/me`, {
+        ...profile,
+        email: currentUserEmail
+      });
+
+      showMessageWithTimeout("Profile updated successfully! ✅", "success");
+      setIsEditing(false);
+    } catch (err) {
+      console.error('Update profile error:', err.response?.data || err.message);
+      showMessageWithTimeout(err.response?.data?.message || "Failed to update profile", "error");
+    }
   };
+
+  if (loading) return <p className="text-center mt-10">Loading profile...</p>;
+  if (error) return <p className="text-center mt-10 text-red-500">{error}</p>;
+  if (!profile) return null; // safeguard
 
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar role={profile.role} />
 
       <div className="max-w-4xl mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold text-[#0e2f44] mb-8 text-center">🧑‍💼 Admin Profile</h1>
+        <h1 className="text-3xl font-bold text-[#0e2f44] mb-8 text-center">
+          🧑‍💼 Admin Profile
+        </h1>
 
         <div className="bg-white rounded-xl shadow-lg p-6">
           {/* Profile Header */}
@@ -97,25 +141,37 @@ export default function AdminProfile() {
           </div>
 
           {/* Profile Details */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6"> 
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Name and Email always read-only */}
             <div className="mt-4">
               <p className="text-sm font-medium text-gray-500">Name</p>
               <p className="text-lg text-gray-800">{profile.name}</p>
-            </div> 
-             <div className="mt-4">
+            </div>
+            <div className="mt-4">
               <p className="text-sm font-medium text-gray-500">Email</p>
               <p className="text-lg text-gray-800">{profile.email}</p>
-            </div>           
+            </div>
+
+            {/* Other editable fields */}
             {[
               { label: "Phone", name: "phone" },
               { label: "Department", name: "department" },
               { label: "Position", name: "position" },
-              { label: "Birthday", name: "birthday" },
+              { 
+                label: "Birthday", 
+                name: "birthday",
+                format: (value) => {
+                  if (!value) return "-";
+                  return new Date(value).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  });
+                }
+              },
               { label: "Gender", name: "gender" },
               { label: "Role", name: "role" },
-              { label: "Salary", name: "salary" },
-              { label: "Married", name: "married", type: "checkbox" }
+              { label: "Married", name: "married" }
             ].map((field) => (
               <div key={field.name}>
                 <p className="text-sm font-medium text-gray-500">{field.label}</p>
@@ -151,7 +207,7 @@ export default function AdminProfile() {
                     </select>
                   ) : (
                     <input
-                      type={field.name === "salary" ? "number" : "text"}
+                      type="text"
                       name={field.name}
                       value={profile[field.name]}
                       onChange={handleChange}

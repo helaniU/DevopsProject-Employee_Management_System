@@ -1,27 +1,22 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import Navbar from "../../components/AdminNavbar";
 
-export default function Leave() {
-  const [leaves, setLeaves] = useState([
-    { id: 1, employee: "John Doe", type: "Sick Leave", from: "2025-09-01", to: "2025-09-03" },
-    { id: 2, employee: "Jane Smith", type: "Casual Leave", from: "2025-09-05", to: "2025-09-06" },
-  ]);
-
-  const [isFormOpen, setIsFormOpen] = useState(false);
-  const [editingLeave, setEditingLeave] = useState(null);
-
-  // 🔹 modal state
+export default function AdminLeaveRequests() {
+  const [leaves, setLeaves] = useState([]);
   const [modal, setModal] = useState({ open: false, id: null, action: "" });
 
-  const handleFormSubmit = (leaveData) => {
-    if (editingLeave) {
-      setLeaves(leaves.map((l) => (l.id === editingLeave.id ? leaveData : l)));
-    } else {
-      const newLeave = { ...leaveData, id: Date.now() };
-      setLeaves([...leaves, newLeave]);
+  useEffect(() => {
+    fetchLeaveRequests();
+  }, []);
+
+  const fetchLeaveRequests = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/api/admin/leaveRequests");
+      setLeaves(res.data);
+    } catch (err) {
+      console.error(err);
     }
-    setIsFormOpen(false);
-    setEditingLeave(null);
   };
 
   // 🔹 open confirmation modal
@@ -29,17 +24,32 @@ export default function Leave() {
     setModal({ open: true, id, action });
   };
 
-  // 🔹 handle approve/reject
-  const confirmAction = () => {
+  // 🔹 approve/reject action
+  const confirmAction = async () => {
     const { id, action } = modal;
-    setLeaves((prev) =>
-      prev.map((leave) =>
-        leave.id === id
-          ? { ...leave, status: action === "approve" ? "Approved" : "Rejected" }
-          : leave
-      )
-    );
-    setModal({ open: false, id: null, action: "" });
+    try {
+      const res = await axios.put(`http://localhost:5000/api/admin/leaveRequests/${id}/status`, {
+        status: action === "approve" ? "approved" : "rejected",
+      });
+      setLeaves((prev) =>
+        prev.map((leave) => (leave._id === id ? res.data : leave))
+      );
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setModal({ open: false, id: null, action: "" });
+    }
+  };
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "approved":
+        return "bg-green-600 text-white";
+      case "rejected":
+        return "bg-red-600 text-white";
+      default:
+        return "bg-yellow-600 text-white";
+    }
   };
 
   return (
@@ -62,43 +72,30 @@ export default function Leave() {
           </thead>
           <tbody>
             {leaves.map((l) => (
-              <tr key={l.id} className="border-b hover:bg-gray-50">
-                <td className="p-3">{l.employee}</td>
-                <td className="p-3">{l.type}</td>
-                <td className="p-3">{l.from}</td>
-                <td className="p-3">{l.to}</td>
+              <tr key={l._id} className="border-b hover:bg-gray-50">
+                <td className="p-3">{l.userId.name}</td>
+                <td className="p-3">{l.reason}</td>
+                <td className="p-3">{new Date(l.from).toLocaleDateString()}</td>
+                <td className="p-3">{new Date(l.to).toLocaleDateString()}</td>
                 <td className="p-3 space-x-2">
-                  {/* <-- CHANGED: show Approve/Reject only when status is not set (Pending). 
-                              After confirm, show Approved (green) or Rejected (red) button. */}
-                  {(!l.status || l.status === "Pending") ? (
+                  {!l.status || l.status === "pending" ? (
                     <>
                       <button
-                        className="bg-yellow-600 text-white px-3 py-1 rounded hover:bg-green-600 transition"
-                        onClick={() => openModal(l.id, "approve")}
+                        className="bg-yellow-600 px-3 py-1 rounded hover:bg-green-600 transition text-white"
+                        onClick={() => openModal(l._id, "approve")}
                       >
                         Approve
                       </button>
-
                       <button
-                        className="bg-yellow-800 text-white px-3 py-1 rounded hover:bg-red-600 transition"
-                        onClick={() => openModal(l.id, "reject")}
+                        className="bg-yellow-800 px-3 py-1 rounded hover:bg-red-600 transition text-white"
+                        onClick={() => openModal(l._id, "reject")}
                       >
                         Reject
                       </button>
                     </>
-                  ) : l.status === "Approved" ? (
-                    <button
-                      className="bg-green-600 text-white px-3 py-1 rounded cursor-default"
-                      disabled
-                    >
-                      Approved
-                    </button>
                   ) : (
-                    <button
-                      className="bg-red-600 text-white px-3 py-1 rounded cursor-default"
-                      disabled
-                    >
-                      Rejected
+                    <button className={`${getStatusColor(l.status)} px-3 py-1 rounded cursor-default`} disabled>
+                      {l.status.charAt(0).toUpperCase() + l.status.slice(1)}
                     </button>
                   )}
                 </td>
@@ -113,19 +110,11 @@ export default function Leave() {
         <div className="fixed inset-0 flex items-center justify-center bg-opacity-50 z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-80 text-center">
             <h2 className="text-xl font-semibold mb-4">
-              {modal.action === "approve"
-                ? "Approve this leave?"
-                : "Reject this leave?"}
+              {modal.action === "approve" ? "Approve this leave?" : "Reject this leave?"}
             </h2>
             <p className="text-gray-600 mb-6">
               Are you sure you want to{" "}
-              <span
-                className={
-                  modal.action === "approve"
-                    ? "text-green-600 font-medium"
-                    : "text-red-600 font-medium"
-                }
-              >
+              <span className={modal.action === "approve" ? "text-green-600 font-medium" : "text-red-600 font-medium"}>
                 {modal.action === "approve" ? "approve" : "reject"}
               </span>{" "}
               this leave?
@@ -133,11 +122,7 @@ export default function Leave() {
             <div className="flex justify-center space-x-3">
               <button
                 onClick={confirmAction}
-                className={`px-4 py-2 rounded text-white ${
-                  modal.action === "approve"
-                    ? "bg-green-600 hover:bg-green-500"
-                    : "bg-red-600 hover:bg-red-500"
-                }`}
+                className={`px-4 py-2 rounded text-white ${modal.action === "approve" ? "bg-green-600 hover:bg-green-500" : "bg-red-600 hover:bg-red-500"}`}
               >
                 Yes
               </button>
@@ -151,10 +136,10 @@ export default function Leave() {
           </div>
         </div>
       )}
+
       <footer className="text-gray-600 py-5 text-center text-sm">
         © {new Date().getFullYear()} EMS Admin Panel — Leave Management
       </footer>
-
     </div>
   );
 }

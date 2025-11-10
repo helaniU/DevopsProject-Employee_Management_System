@@ -117,7 +117,6 @@ export default function Profile() {
                 <div className="flex-shrink-0 text-center md:text-left">
                   <img
                     src={profile.image || "https://via.placeholder.com/240x240.png?text=Profile"}
-                    alt="Profile"
                     className="w-40 h-40 rounded-full object-cover border-4 border-white shadow-lg mx-auto md:mx-0"
                     style={{ boxShadow: "0 8px 24px rgba(14,47,68,0.12)" }}
                   />
