@@ -16,18 +16,14 @@ pipeline {
         }
 
         stage('Run Containers') {
-        steps {
-            sh '''
-            # Remove any existing container named "mongo" if it exists
-            if [ $(docker ps -a -q -f name=mongo) ]; then
-                docker rm -f mongo
-            fi
-
-            # Bring up your docker-compose containers
-            docker compose up -d
-            '''
+            steps {
+                // Stop and remove existing containers first to avoid conflicts
+                sh '''
+                docker compose down
+                docker compose up -d
+                '''
+            }
         }
-}
 
         stage('Verify') {
             steps {
