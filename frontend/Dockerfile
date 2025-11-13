@@ -12,6 +12,9 @@ RUN npm run build
 # Serve the production build with Nginx
 FROM nginx:alpine
 
+# Copy custom nginx.conf
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
 # Copy built files (Vite outputs to /app/dist)
 COPY --from=build /app/dist /usr/share/nginx/html
 
@@ -19,3 +22,9 @@ COPY --from=build /app/dist /usr/share/nginx/html
 EXPOSE 5333
 
 CMD ["nginx", "-g", "daemon off;"]
+
+
+
+
+
+
