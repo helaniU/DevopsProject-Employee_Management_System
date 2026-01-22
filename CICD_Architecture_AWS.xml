@@ -1,0 +1,186 @@
+<mxfile host="Electron" modified="2026-01-22T10:00:00.000Z" agent="Mozilla/5.0" etag="xyz" version="20.8.1" type="device">
+  <diagram id="cicd-aws-diagram" name="CI/CD Pipeline with AWS">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="900" background="#ffffff" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Section Titles -->
+        <mxCell id="title1" value="Version Control" style="text;html=1;strokeColor=none;fillColor=none;fontSize=14;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="20" y="30" width="100" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- GitHub Repository -->
+        <mxCell id="github" value="GitHub/GitLab&#10;(Repository)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4A90E2;strokeColor=#2E5C8A;strokeWidth=2;fontSize=12;fontColor=#ffffff;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="20" y="70" width="120" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Jenkins CI/CD Pipeline -->
+        <mxCell id="title2" value="CI/CD Pipeline" style="text;html=1;strokeColor=none;fillColor=none;fontSize=14;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="180" y="30" width="100" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="jenkins" value="Jenkins&#10;Build → Test → Package" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FF9900;strokeColor=#C87400;strokeWidth=2;fontSize=12;fontColor=#ffffff;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="170" y="70" width="140" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Docker Build -->
+        <mxCell id="docker" value="Docker Build&#10;(Images)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0DB8E8;strokeColor=#0A7FB8;strokeWidth=2;fontSize=12;fontColor=#ffffff;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="340" y="70" width="120" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- AWS ECR -->
+        <mxCell id="title3" value="Artifact Storage" style="text;html=1;strokeColor=none;fillColor=none;fontSize=14;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="500" y="30" width="100" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ecr" value="AWS ECR&#10;(Container Registry)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FF9900;strokeColor=#C87400;strokeWidth=2;fontSize=12;fontColor=#ffffff;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="490" y="70" width="130" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- IaC Section -->
+        <mxCell id="title4" value="Infrastructure as Code" style="text;html=1;strokeColor=none;fillColor=none;fontSize=14;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="680" y="30" width="120" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="terraform" value="Terraform&#10;(AWS Resources)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#623CE4;strokeColor=#3F1E99;strokeWidth=2;fontSize=12;fontColor=#ffffff;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="680" y="70" width="120" height="80" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ansible" value="Ansible&#10;(Configuration)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EE0000;strokeColor=#990000;strokeWidth=2;fontSize=12;fontColor=#ffffff;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="680" y="170" width="120" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- AWS Deployment Environment Container -->
+        <mxCell id="aws-container" value="AWS Deployment Environment" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#FF9900;strokeWidth=3;fontSize=13;fontStyle=1;align=left;verticalAlign=top;dashed=0;spacingTop=20;" vertex="1" parent="1">
+          <mxGeometry x="850" y="50" width="520" height="450" as="geometry" />
+        </mxCell>
+
+        <!-- AWS ALB (Load Balancer) -->
+        <mxCell id="alb" value="AWS ALB&#10;(Load Balancer)&#10;Port: 80/443" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FF9900;strokeColor=#C87400;strokeWidth=2;fontSize=11;fontColor=#ffffff;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="80" width="130" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- AWS EC2/ECS Frontend -->
+        <mxCell id="ec2-frontend" value="AWS EC2/ECS&#10;Frontend" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FF9900;strokeColor=#C87400;strokeWidth=2;fontSize=11;fontColor=#ffffff;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="870" y="200" width="130" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Frontend Container -->
+        <mxCell id="frontend-container" value="React Container&#10;Port: 3000" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4A90E2;strokeColor=#2E5C8A;strokeWidth=2;fontSize=10;fontColor=#ffffff;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="880" y="220" width="110" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- AWS EC2/ECS Backend -->
+        <mxCell id="ec2-backend" value="AWS EC2/ECS&#10;Backend" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FF9900;strokeColor=#C87400;strokeWidth=2;fontSize=11;fontColor=#ffffff;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="200" width="130" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Backend Container -->
+        <mxCell id="backend-container" value="Node.js Container&#10;Port: 5000" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4A90E2;strokeColor=#2E5C8A;strokeWidth=2;fontSize=10;fontColor=#ffffff;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="220" width="110" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- AWS RDS Database -->
+        <mxCell id="rds" value="AWS RDS&#10;(Database)&#10;MongoDB/MySQL&#10;Port: 27017/3306" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#527FFF;strokeColor=#3C5AA6;strokeWidth=2;fontSize=10;fontColor=#ffffff;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="930" y="320" width="130" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- AWS S3 Storage -->
+        <mxCell id="s3" value="AWS S3&#10;(Logs, Backups,&#10;Artifacts)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FF9900;strokeColor=#C87400;strokeWidth=2;fontSize=10;fontColor=#ffffff;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1090" y="320" width="130" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- Connections/Arrows -->
+
+        <!-- Git to Jenkins -->
+        <mxCell id="arrow1" value="Webhook&#10;Trigger" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;strokeWidth=2;fontSize=10;" edge="1" parent="1" source="github" target="jenkins">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Jenkins to Docker -->
+        <mxCell id="arrow2" value="Build&#10;Images" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;strokeWidth=2;fontSize=10;" edge="1" parent="1" source="jenkins" target="docker">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Docker to ECR -->
+        <mxCell id="arrow3" value="Push&#10;Images" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;strokeWidth=2;fontSize=10;" edge="1" parent="1" source="docker" target="ecr">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ECR to EC2 Frontend -->
+        <mxCell id="arrow4" value="Pull&#10;Deploy" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;strokeWidth=2;fontSize=10;" edge="1" parent="1" source="ecr" target="ec2-frontend">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="850" y="280" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- ECR to EC2 Backend -->
+        <mxCell id="arrow5" value="Pull&#10;Deploy" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;strokeWidth=2;fontSize=10;" edge="1" parent="1" source="ecr" target="ec2-backend">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="850" y="280" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Terraform to AWS -->
+        <mxCell id="arrow6" value="Provision&#10;Infrastructure" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;strokeWidth=2;fontSize=10;" edge="1" parent="1" source="terraform" target="aws-container">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="850" y="150" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Ansible to AWS -->
+        <mxCell id="arrow7" value="Configure&#10;Environment" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;strokeWidth=2;fontSize=10;" edge="1" parent="1" source="ansible" target="aws-container">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="850" y="250" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- ALB to Frontend -->
+        <mxCell id="arrow8" value="Route Traffic&#10;HTTP/HTTPS" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;strokeWidth=2;fontSize=9;" edge="1" parent="1" source="alb" target="ec2-frontend">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ALB to Backend -->
+        <mxCell id="arrow9" value="Route Traffic" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;strokeWidth=2;fontSize=9;" edge="1" parent="1" source="alb" target="ec2-backend">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Frontend to Backend API Communication -->
+        <mxCell id="arrow10" value="API Calls&#10;HTTP (Port 5000)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#E74C3C;strokeWidth=2;fontSize=9;dashed=1;" edge="1" parent="1" source="ec2-frontend" target="ec2-backend">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1000" y="250" as="sourcePoint" />
+            <mxPoint x="1000" y="250" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Backend to Database Communication -->
+        <mxCell id="arrow11" value="Database Queries&#10;TCP (Port 27017/3306)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#E74C3C;strokeWidth=2;fontSize=9;dashed=1;" edge="1" parent="1" source="ec2-backend" target="rds">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1050" y="300" as="sourcePoint" />
+            <mxPoint x="1000" y="330" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- EC2 to S3 -->
+        <mxCell id="arrow12" value="Store Logs&#10;&amp; Artifacts" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#27AE60;strokeWidth=2;fontSize=9;dashed=1;" edge="1" parent="1" source="ec2-frontend" target="s3">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1000" y="280" as="sourcePoint" />
+            <mxPoint x="1150" y="320" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Explanation Text Box -->
+        <mxCell id="explanation" value="CI/CD PIPELINE WITH AWS ARCHITECTURE&#10;&#10;1. SOURCE CODE MANAGEMENT: Developers push code to GitHub/GitLab repository&#10;2. WEBHOOK TRIGGER: Git webhook triggers Jenkins CI/CD pipeline&#10;3. BUILD STAGE: Jenkins pulls code, runs tests, builds Docker images for Frontend and Backend&#10;4. IMAGE REGISTRY: Docker images pushed to AWS ECR (Elastic Container Registry)&#10;5. INFRASTRUCTURE AS CODE: &#10;   • Terraform provisions AWS resources (EC2, RDS, ALB, S3, VPC, Security Groups)&#10;   • Ansible configures EC2 instances and installs required software&#10;6. DEPLOYMENT: Jenkins/Terraform pulls images from ECR and deploys to EC2/ECS instances&#10;7. LOAD BALANCING: AWS ALB distributes traffic across Frontend and Backend instances&#10;8. APPLICATION COMMUNICATION:&#10;   • Frontend (React) on Port 3000 communicates with Backend API&#10;   • Backend (Node.js) on Port 5000 communicates with Database&#10;   • Database (RDS) on Port 27017/3306 for MongoDB/MySQL&#10;9. STORAGE: Logs, backups, and artifacts stored in AWS S3&#10;10. HIGH AVAILABILITY: Multi-AZ deployment with auto-scaling&#10;11. MONITORING: CloudWatch monitors application health and infrastructure metrics&#10;&#10;SECURITY: VPC, Security Groups, IAM roles manage access and permissions&#10;CONTINUOUS DEPLOYMENT: Pipeline automatically deploys on code changes" style="text;html=1;strokeColor=#666666;fillColor=#F5F5F5;strokeWidth=1;fontSize=9;align=left;verticalAlign=top;spacing=5;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="20" y="530" width="1350" height="350" as="geometry" />
+        </mxCell>
+
+        <!-- Legend -->
+        <mxCell id="legend-title" value="LEGEND" style="text;html=1;strokeColor=none;fillColor=none;fontSize=12;fontStyle=1;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="20" y="500" width="100" height="20" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
