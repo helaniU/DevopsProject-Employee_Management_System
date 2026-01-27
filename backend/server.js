@@ -20,26 +20,27 @@ console.log("🔍 MONGO_URL:", process.env.MONGO_URL); // debug log
 connectDB();
 
 const app = express();
-app.use(
-  cors({
-    origin: [
-      "http://13.233.73.206:5333",
-      "http://localhost:5173"
-    ],
-    credentials: true,
-  })
-);
+app.use(cors({
+  origin: (origin, callback) => {
+    const allowed = ["http://13.233.73.206:5333", "http://localhost:5173"];
+    if (!origin || allowed.includes(origin)) callback(null, true);
+    else callback(new Error("Not allowed by CORS"));
+  },
+  credentials: true,
+}));
 
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ limit: "10mb", extended: true }));
 app.use("/uploads", express.static("uploads"));
 
 // Debug middleware
-app.use((req, res, next) => {
-  console.log(`${req.method} ${req.path} - Query:`, req.query);
+app.use((err, req, res, next) => {
+  if (err instanceof Error && err.message === "Not allowed by CORS") {
+    console.log("❌ CORS blocked:", req.headers.origin);
+    return res.status(403).json({ error: err.message });
+  }
   next();
 });
-
 
 // API Routes
 app.use("/api/users", userRoutes);
