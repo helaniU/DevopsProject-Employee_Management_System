@@ -48,7 +48,7 @@ export default function Signup() {
   };
 
   try {
-    const res = await axios.post("http://localhost:5000/api/users/signup", signupData);
+    const res = await axios.post("http://13.233.73.206:5000/api/users/signup", signupData);
     alert(res.data.message);
     navigate("/login");
   } catch (err) {

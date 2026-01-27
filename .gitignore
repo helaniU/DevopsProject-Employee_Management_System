@@ -1,1 +1,20 @@
+# Node
 node_modules/
+dist/
+build/
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.backup
+.terraform.lock.hcl
+
+# Secrets
+*.pem
+.env
+
+# Logs
+*.log
+
+.idea/
+.vscode/
