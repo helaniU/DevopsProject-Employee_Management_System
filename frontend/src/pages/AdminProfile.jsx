@@ -2,9 +2,6 @@ import { useState, useEffect, useRef } from "react";
 import Navbar from "../components/AdminNavbar";
 import axios from "axios";
 
-import { useParams } from "react-router-dom";
-
-
 import {
   User,
   Mail,
@@ -28,55 +25,31 @@ export default function AdminProfile() {
 
   const fileInputRef = useRef(null);
 
-  const { id } = useParams();
-
-  // useEffect(() => {
-  //   const fetchUserProfile = async () => {
-  //     try {
-  //       const currentUserEmail = localStorage.getItem("currentUserEmail");
-  //       if (!currentUserEmail) {
-  //         setError("No logged-in user found. Please log in again.");
-  //         setLoading(false);
-  //         return;
-  //       }
-
-  //       const res = await axios.get(
-  //         "http://13.233.73.206:5000/api/users/me",
-  //         { params: { email: currentUserEmail } }
-  //       );
-
-  //       setProfile(res.data);
-  //       setLoading(false);
-  //     } catch (err) {
-  //       setError("Failed to fetch user profile.");
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   fetchUserProfile();
-  // }, []);
-
   useEffect(() => {
-  const fetchAdminProfile = async () => {
-    try {
-      if (!id) {
-        setError("No admin selected.");
+    const fetchUserProfile = async () => {
+      try {
+        const currentUserEmail = localStorage.getItem("currentUserEmail");
+        if (!currentUserEmail) {
+          setError("No logged-in user found. Please log in again.");
+          setLoading(false);
+          return;
+        }
+
+        const res = await axios.get(
+          "http://13.233.73.206:5000/api/users/me",
+          { params: { email: currentUserEmail } }
+        );
+
+        setProfile(res.data);
         setLoading(false);
-        return;
+      } catch (err) {
+        setError("Failed to fetch user profile.");
+        setLoading(false);
       }
+    };
 
-      const res = await axios.get(`http://13.233.73.206:5000/api/users/${id}`);
-      setProfile(res.data);
-      setLoading(false);
-    } catch (err) {
-      console.error(err);
-      setError("Failed to fetch admin profile.");
-      setLoading(false);
-    }
-  };
-
-  fetchAdminProfile();
-}, [id]);
+    fetchUserProfile();
+  }, []);
 
   const showMessageWithTimeout = (msg, type = "success", timeout = 3000) => {
     setMessage(msg);

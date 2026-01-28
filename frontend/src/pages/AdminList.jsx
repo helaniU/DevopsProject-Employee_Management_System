@@ -3,11 +3,32 @@ import Navbar from "../components/AdminNavbar";
 import axios from "axios";
 
 export default function AdminList() {
-   const navigate = useNavigate();
+  const [admins, setAdmins] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchAdmins = async () => {
+      try {
+        const res = await axios.get(
+          "http://13.233.73.206:5000/api/users/admins"
+        );
+        setAdmins(res.data);
+      } catch (err) {
+        console.error("Error fetching admin list:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAdmins();
+  }, []);
+
+ const navigate = useNavigate();
 
   const handleViewProfile = (admin) => {
-    navigate(`/admin-profile/${admin._id}`);
+    navigate(`/admin/profile/${admin._id}`);
   };
+
   if (loading) {
     return <p className="text-center mt-10">Loading profile...</p>;
   }
