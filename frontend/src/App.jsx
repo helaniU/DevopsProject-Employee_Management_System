@@ -29,7 +29,15 @@ function App() {
 
   {/* Admin */}
   <Route path="/dashboard/admins" element={<ProtectedRoute role="admin"><AdminDashboard /></ProtectedRoute>} />
-  <Route path="/admin-profile" element={<ProtectedRoute role="admin"><AdminProfile /></ProtectedRoute>} />
+  {/* <Route path="/admin-profile" element={<ProtectedRoute role="admin"><AdminProfile /></ProtectedRoute>} /> */}
+  <Route
+  path="/admin-profile/:id"
+  element={
+    <ProtectedRoute role="admin">
+      <AdminProfile />
+    </ProtectedRoute>
+  }
+/>
   <Route path="/employees" element={<ProtectedRoute role="admin"><EmployeeList /></ProtectedRoute>} />
   <Route path="/departments" element={<ProtectedRoute role="admin"><DepartmentList /></ProtectedRoute>} />
   <Route path="/salarylist" element={<ProtectedRoute role="admin"><SalaryList /></ProtectedRoute>} />
