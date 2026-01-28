@@ -104,7 +104,7 @@ export default function AdminProfile() {
           🧑‍💼 Admin Profile
         </h1>
 
-        <div className="bg-white rounded-xl shadow-lg p-6">
+        <div className="bg-[#a8c3d4] rounded-xl shadow-lg p-6">
           {/* Header */}
           <div className="flex flex-col items-center mb-8">
             <div className="relative">
@@ -219,11 +219,19 @@ export default function AdminProfile() {
 
             <div>
               <p className="text-sm font-medium text-gray-500 flex items-center gap-2">
-                <Heart size={16} /> Married
+                <Heart size={16} /> Marital Status
               </p>
-              <p className="text-lg">
-                {profile.married ? "Yes" : "No"}
-              </p>
+              {isEditing ? (
+                <input
+                  type="checkbox"
+                  name="married"
+                  checked={profile.married || false}
+                  onChange={handleChange}
+                  className="mt-1 h-5 w-5"
+                />
+              ) : (
+                <p className="text-lg">{profile.married ? "Single" : "Married"}</p>
+              )}
             </div>
           </div>
 

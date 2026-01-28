@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Navbar from "../components/AdminNavbar";
 import axios from "axios";
+import { X, Send, MessageCircle } from "lucide-react";
 
 export default function AdminList() {
   const [admins, setAdmins] = useState([]);
@@ -43,7 +44,7 @@ export default function AdminList() {
 
     fetchAdmins();
   }, []);
-  
+
   if (loading) {
     return <p className="text-center mt-10">Loading profile...</p>;
   }
@@ -122,32 +123,51 @@ export default function AdminList() {
       </footer>
 
       {selectedAdmin && (
-        <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center">
-          <div className="bg-white p-6 rounded-xl w-96">
-            <h2 className="text-xl font-semibold mb-4">Message to {selectedAdmin.name}</h2>
-            <textarea
-              className="w-full p-2 border rounded-md mb-4"
-              value={messageText}
-              onChange={(e) => setMessageText(e.target.value)}
-              placeholder="Type your message..."
-            />
-            <div className="flex justify-end gap-2">
-              <button
-                onClick={() => setSelectedAdmin(null)}
-                className="px-4 py-2 bg-gray-300 rounded-md hover:bg-gray-400"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={sendMessage}
-                className="px-4 py-2 bg-[#7b685c] text-white rounded-md hover:bg-[#433d39]"
-              >
-                Send
-              </button>
-            </div>
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+        <div className="bg-white rounded-2xl shadow-2xl w-96 p-6 relative">
+          {/* Close button */}
+          <button
+            onClick={() => setSelectedAdmin(null)}
+            className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 transition"
+          >
+            <X size={20} />
+          </button>
+
+          {/* Header */}
+          <div className="flex items-center gap-2 mb-4">
+            <MessageCircle size={24} className="text-[#7b685c]" />
+            <h2 className="text-xl font-semibold text-gray-800">
+              Message to {selectedAdmin.name}
+            </h2>
+          </div>
+
+          {/* Textarea */}
+          <textarea
+            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7b685c] focus:border-[#7b685c] mb-4 resize-none"
+            value={messageText}
+            onChange={(e) => setMessageText(e.target.value)}
+            placeholder="Type your message here..."
+            rows={5}
+          />
+
+          {/* Action Buttons */}
+          <div className="flex justify-end gap-3">
+            <button
+              onClick={() => setSelectedAdmin(null)}
+              className="flex items-center gap-1 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition"
+            >
+              <X size={16} /> Cancel
+            </button>
+            <button
+              onClick={sendMessage}
+              className="flex items-center gap-1 px-4 py-2 bg-[#7b685c] text-white rounded-lg hover:bg-[#433d39] transition"
+            >
+              <Send size={16} /> Send
+            </button>
           </div>
         </div>
-      )}
+      </div>
+    )}
     </div>
   );
 }
