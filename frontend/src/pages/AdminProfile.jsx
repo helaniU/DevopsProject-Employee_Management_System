@@ -151,26 +151,27 @@ useEffect(() => {
               <p className="text-sm font-medium text-gray-500">Email</p>
               <p className="text-lg text-gray-800">{profile.email}</p>
             </div>
+            <div className="mt-4">
+              <p className="text-sm font-medium text-gray-500">Birthday</p>
+              <p className="text-lg text-gray-800">
+                {profile.birthday ? new Date(profile.birthday).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                }) : "-"}
+              </p>
+            </div>
+            <div className="mt-4">
+              <p className="text-sm font-medium text-gray-500">Role</p>
+              <p className="text-lg text-gray-800 capitalize">{profile.role}</p>
+            </div>
 
             {/* Other editable fields */}
             {[
               { label: "Phone", name: "phone" },
               { label: "Department", name: "department" },
               { label: "Position", name: "position" },
-              { 
-                label: "Birthday", 
-                name: "birthday",
-                format: (value) => {
-                  if (!value) return "-";
-                  return new Date(value).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                  });
-                }
-              },
               { label: "Gender", name: "gender" },
-              { label: "Role", name: "role" },
               { label: "Married", name: "married" }
             ].map((field) => (
               <div key={field.name}>
@@ -184,26 +185,17 @@ useEffect(() => {
                       onChange={handleChange}
                       className="mt-1"
                     />
-                  ) : field.name === "gender" || field.name === "role" ? (
+                  ) : field.name === "gender" ? (
                     <select
                       name={field.name}
                       value={profile[field.name]}
                       onChange={handleChange}
                       className="mt-1 w-full p-2 border rounded-md"
                     >
-                      {field.name === "gender" ? (
-                        <>
-                          <option value="">Select Gender</option>
-                          <option value="male">Male</option>
-                          <option value="female">Female</option>
-                          <option value="other">Other</option>
-                        </>
-                      ) : (
-                        <>
-                          <option value="admin">Admin</option>
-                          <option value="superadmin">Super Admin</option>
-                        </>
-                      )}
+                      <option value="">Select Gender</option>
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
+                      <option value="other">Other</option>
                     </select>
                   ) : (
                     <input

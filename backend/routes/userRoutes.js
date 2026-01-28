@@ -85,6 +85,43 @@ router.get("/me", async (req, res) => {
   }
 });
 
+//--------------------------------------
+// Update user profile
+router.put("/me", async (req, res) => {
+  try {
+    const { email, phone, department, position, gender, married, image } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ message: "Email is required to update profile" });
+    }
+
+    // Find user by email and update the allowed fields
+    const updatedUser = await User.findOneAndUpdate(
+      { email: email },
+      { 
+        $set: { 
+          phone, 
+          department, 
+          position, 
+          gender, 
+          married, 
+          image 
+        } 
+      },
+      { new: true, runValidators: true } // new: true returns the updated document
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json({ message: "Profile updated successfully ✅", user: updatedUser });
+  } catch (err) {
+    console.error("Update error:", err);
+    res.status(500).json({ message: "Failed to update profile ❌" });
+  }
+});
+
 
 
 
