@@ -1,18 +1,35 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "../components/AdminNavbar";
-import { Trash2 } from "lucide-react";
+import axios from "axios";
 
 export default function AdminList() {
-  const [admins, setAdmins] = useState([
-    { id: 1, name: "John Admin", email: "john@ems.com", role: "Super Admin", mobile: "123-456-7890" },
-    { id: 2, name: "Jane Admin", email: "jane@ems.com", role: "Admin", mobile: "987-654-3210" },
-  ]);
+  const [admins, setAdmins] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchAdmins = async () => {
+      try {
+        const res = await axios.get(
+          "http://13.233.73.206:5000/api/users/admins"
+        );
+        setAdmins(res.data);
+      } catch (err) {
+        console.error("Error fetching admin list:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAdmins();
+  }, []);
 
   const handleViewProfile = (admin) => {
     alert(`Viewing profile of ${admin.name}`);
-    // 🔹 Later you can replace this with navigation like:
-    // navigate(`/admin/profile/${admin.id}`);
   };
+
+  if (loading) {
+    return <p className="text-center mt-10">Loading admins...</p>;
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-[#d9d9d9]">
@@ -37,21 +54,23 @@ export default function AdminList() {
                   <th className="p-4 text-left font-medium">Email</th>
                   <th className="p-4 text-left font-medium">Role</th>
                   <th className="p-4 text-left font-medium">Phone</th>
-                  <th className="p-4 text-center font-medium">profile</th>
+                  <th className="p-4 text-center font-medium">Profile</th>
                 </tr>
               </thead>
               <tbody>
                 {admins.map((admin) => (
                   <tr
-                    key={admin.id}
+                    key={admin._id}
                     className="border-b hover:bg-gray-50 transition-all duration-200"
                   >
-                    <td className="p-4 font-semibold text-gray-800">{admin.name}</td>
+                    <td className="p-4 font-semibold text-gray-800">
+                      {admin.name}
+                    </td>
                     <td className="p-4 text-gray-700">{admin.email}</td>
                     <td className="p-4">
                       <span
                         className={`px-3 py-1 rounded-full text-sm font-medium ${
-                          admin.role === "Super Admin"
+                          admin.role === "admin"
                             ? "bg-green-100 text-green-800"
                             : "bg-blue-100 text-blue-800"
                         }`}
@@ -59,15 +78,17 @@ export default function AdminList() {
                         {admin.role}
                       </span>
                     </td>
-                    <td className="p-4 text-gray-700">{admin.mobile}</td>
+                    <td className="p-4 text-gray-700">
+                      {admin.phone || "-"}
+                    </td>
                     <td className="p-4 text-center">
-                    <button
-                      onClick={() => handleViewProfile(admin)}
-                      className="px-4 py-2 text-sm font-semibold bg-[#7b685c] text-white rounded-lg hover:bg-[#433d39] transition"
-                    >
-                      View Profile
-                    </button>
-                  </td>
+                      <button
+                        onClick={() => handleViewProfile(admin)}
+                        className="px-4 py-2 text-sm font-semibold bg-[#7b685c] text-white rounded-lg hover:bg-[#433d39] transition"
+                      >
+                        View Profile
+                      </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -78,7 +99,9 @@ export default function AdminList() {
 
       {/* Footer */}
       <footer className="bg-[#0e2f44] text-white py-5 text-center text-sm mt-10 shadow-inner">
-        © {new Date().getFullYear()} <span className="font-semibold">EMS Admin Panel</span> — All Rights Reserved
+        © {new Date().getFullYear()}{" "}
+        <span className="font-semibold">EMS Admin Panel</span> — All Rights
+        Reserved
       </footer>
     </div>
   );

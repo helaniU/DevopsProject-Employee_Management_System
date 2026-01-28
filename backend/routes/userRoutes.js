@@ -122,6 +122,20 @@ router.put("/me", async (req, res) => {
   }
 });
 
+// Get all admins and superadmins
+router.get("/admins", async (req, res) => {
+  try {
+    // Finds users where role is either 'admin' or 'superadmin'
+    const admins = await User.find({ 
+      role: { $in: ["admin", "superadmin"] } 
+    }).select("-password"); // Exclude passwords for security
+
+    res.status(200).json(admins);
+  } catch (err) {
+    console.error("Error fetching admins:", err);
+    res.status(500).json({ message: "Server error while fetching admins" });
+  }
+});
 
 
 
