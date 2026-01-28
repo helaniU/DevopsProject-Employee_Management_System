@@ -25,7 +25,7 @@ useEffect(() => {
       }
 
       console.log('Fetching profile with email:', currentUserEmail);
-      const res = await axios.get(`http://localhost:5000/api/users/me`, {
+      const res = await axios.get(`http://13.233.73.206:5000/api/users/me`, {
         params: {
           email: currentUserEmail
         }
@@ -84,7 +84,7 @@ useEffect(() => {
       }
 
       // Update profile in the database
-      await axios.put(`http://localhost:5000/api/users/me`, {
+      await axios.put(`http://13.233.73.206:5000/api/users/me`, {
         ...profile,
         email: currentUserEmail
       });
