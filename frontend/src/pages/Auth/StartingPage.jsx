@@ -19,7 +19,7 @@ export default function GetStarted() {
         <div>
           <p className="text-white font-semibold">Helani  - 📞
             <a href="tel:+94771234567" className="text-white font-semibold hover:underline">
-              +94 77 123 4567999
+              +94 77 123 4567
             </a>
           </p>
         </div>
