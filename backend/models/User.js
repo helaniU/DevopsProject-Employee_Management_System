@@ -13,7 +13,7 @@ const userSchema = new mongoose.Schema({
   //-------------------
   married: { type: String },
   role: { type: String, enum: ["admin", "employee"], default: "employee" },
-  image: { type: String },
+  image: { type: String , select: false },
   rememberMe: { type: Boolean, default: false },
 }, { timestamps: true });
 
