@@ -9,11 +9,15 @@ pipeline {
             }
         }
 
-        stage('Build Containers') {
+        stage('Deploy') {
             steps {
-                sh 'docker compose build'
+                sh '''
+                docker compose down
+                docker compose build --no-cache
+                docker compose up -d
+                '''
             }
-        }
+        }       
 
         stage('Run Containers') {
             steps {
