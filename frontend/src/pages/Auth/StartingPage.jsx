@@ -17,7 +17,7 @@ export default function GetStarted() {
 
         {/* Right side: Contact Number */}
         <div>
-          <p className="text-white font-semibold">Contact us - 📞
+          <p className="text-white font-semibold">Helani - 📞
             <a href="tel:+94771234567" className="text-white font-semibold hover:underline">
               +94 77 123 4567
             </a>
