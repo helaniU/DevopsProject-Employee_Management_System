@@ -17,8 +17,8 @@ export default function DepartmentList() {
     const fetchData = async () => {
       try {
         const [empRes, deptRes] = await Promise.all([
-          axios.get("http://localhost:5000/api/employees"),
-          axios.get("http://localhost:5000/api/departments"),
+          axios.get("http://13.233.73.206:5000/api/employees"),
+          axios.get("http://13.233.73.206:5000/api/departments"),
         ]);
         setEmployees(empRes.data);
         setDepartments(deptRes.data);
@@ -48,7 +48,7 @@ export default function DepartmentList() {
   // Delete department
   const handleDelete = async (deptId) => {
     try {
-      await axios.delete(`http://localhost:5000/api/departments/${deptId}`);
+      await axios.delete(`http://13.233.73.206:5000/api/departments/${deptId}`);
       setDepartments(departments.filter((d) => d._id !== deptId));
     } catch (err) {
       console.error("Failed to delete department:", err);
@@ -71,7 +71,7 @@ export default function DepartmentList() {
       if (editingDepartment) {
         // Edit
         const res = await axios.put(
-          `http://localhost:5000/api/departments/${editingDepartment._id}`,
+          `http://13.233.73.206:5000/api/departments/${editingDepartment._id}`,
           data
         );
         setDepartments(
@@ -79,7 +79,7 @@ export default function DepartmentList() {
         );
       } else {
         // Add
-        const res = await axios.post("http://localhost:5000/api/departments", data);
+        const res = await axios.post("http://13.233.73.206:5000/api/departments", data);
         setDepartments([...departments, res.data]);
       }
 

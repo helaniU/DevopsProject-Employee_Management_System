@@ -17,7 +17,7 @@ export default function AdminDashboard() {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/admindashboard/stats");
+        const res = await axios.get("http://13.233.73.206:5000/api/admindashboard/stats");
         const data = res.data;
 
         setStats([
