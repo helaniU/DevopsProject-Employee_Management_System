@@ -2,31 +2,33 @@ pipeline {
     agent any
 
     stages {
-        stage('Clone Repository') {
-            steps {
-                git branch: 'main', 
-                url: 'https://github.com/helaniU/DevopsProject-Employee_Management_System',
-                credentialsId: 'github-token'
-            }
-        }
-
         stage('Build and Deploy') {
             steps {
-                sh '''
-                ssh -i /var/lib/jenkins/.ssh/EMS.pem -o StrictHostKeyChecking=no ec2-user@13.233.73.206 "
-                    cd /home/ec2-user/ems || exit 1 &&
-                    docker-compose down --remove-orphans || true &&
-                    docker-compose build --no-cache frontend &&
-                    docker-compose up -d --force-recreate --remove-orphans
-                "
-                '''
+                sshagent(['ec2-user-ssh-key']) {  // use the ID of your SSH credential in Jenkins
+                    sh '''
+                    ssh -o StrictHostKeyChecking=no ec2-user@13.233.73.206 "
+                        cd /home/ec2-user/ems || exit 1
+                        git fetch origin
+                        git reset --hard origin/main
+                        docker-compose down --remove-orphans || true
+                        docker-compose build --no-cache
+                        docker-compose up -d --force-recreate --remove-orphans
+                    "
+                    '''
+                }
             }
         }
         
         stage('Verify') {
             steps {
-                sh 'docker ps -a'
-                sh 'docker logs backend || true'
+                sshagent(['ec2-user-ssh-key']) {
+                    sh '''
+                    ssh -o StrictHostKeyChecking=no ec2-user@13.233.73.206 "
+                        docker ps -a
+                        docker logs backend || true
+                    "
+                    '''
+                }
             }
         }
     }
