@@ -1,108 +1,137 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "../../components/AdminNavbar";
-import SalaryForm from "./SalaryForm";
 
 export default function SalaryList() {
-  // Import employees from EmployeeList or use a shared state later
-  const [employees, setEmployees] = useState([
-    { id: 1, name: "John Doe", department: "IT" },
-    { id: 2, name: "Jane Smith", department: "HR" },
-  ]);
+  const [employees, setEmployees] = useState([]);
+  const [search, setSearch] = useState("");
 
-  const [salaries, setSalaries] = useState([
-    { id: 1, employeeId: 1, salary: 50000 },
-    { id: 2, employeeId: 2, salary: 45000 },
-  ]);
+  // 🔹 Fetch Employees (with salary fields inside)
+  useEffect(() => {
+    fetch("http://13.233.73.206:5000/api/employees")
+      .then(res => res.json())
+      .then(data => setEmployees(data))
+      .catch(err => console.error("Error fetching employees:", err));
+  }, []);
 
-  const [editingSalary, setEditingSalary] = useState(null);
-  const [isFormOpen, setIsFormOpen] = useState(false);
+  // 🔹 Calculate totals
+  const totalPayroll = employees.reduce(
+    (sum, emp) =>
+      sum +
+      (emp.basicSalary || 0) +
+      (emp.allowance || 0) -
+      (emp.deduction || 0),
+    0
+  );
 
-  const handleEdit = (record) => {
-    setEditingSalary(record);
-    setIsFormOpen(true);
-  };
+  const averageSalary =
+    employees.length > 0
+      ? Math.floor(totalPayroll / employees.length)
+      : 0;
 
-  const handleDelete = (id) => {
-    setSalaries(salaries.filter((rec) => rec.id !== id));
-  };
-
-  const handleFormSubmit = (data) => {
-    if (editingSalary) {
-      // Update existing salary
-      setSalaries(salaries.map((rec) => (rec.id === editingSalary.id ? data : rec)));
-    } else {
-      // Add new salary
-      const newRecord = { ...data, id: Date.now() };
-      setSalaries([...salaries, newRecord]);
-    }
-    setIsFormOpen(false);
-    setEditingSalary(null);
-  };
-
-  const getEmployeeName = (id) => employees.find(emp => emp.id === id)?.name || "";
-  const getEmployeeDept = (id) => employees.find(emp => emp.id === id)?.department || "";
+  // 🔹 Search filter
+  const filteredEmployees = employees.filter((emp) =>
+    emp.name.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <div>
       <Navbar />
-      <div className="p-8 bg-[#d9d9d9] min-h-screen">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold text-[#0e2f44]">💰 Salary Management</h1>
-          <button
-            onClick={() => setIsFormOpen(true)}
-            className="bg-[#0e2f44] text-white px-4 py-2 rounded-lg hover:bg-[#144868] transition"
-          >
-            + Add Salary
-          </button>
+
+      <div className="p-8 bg-gray-100 min-h-screen">
+        <h1 className="text-3xl font-bold text-gray-800 mb-6">
+          💰 Payroll Management
+        </h1>
+
+        {/* 🔹 Summary Cards */}
+        <div className="grid grid-cols-3 gap-6 mb-8">
+          <div className="bg-white p-6 rounded-2xl shadow">
+            <p className="text-gray-500">Total Employees</p>
+            <h2 className="text-2xl font-bold">
+              {employees.length}
+            </h2>
+          </div>
+
+          <div className="bg-white p-6 rounded-2xl shadow">
+            <p className="text-gray-500">Total Payroll</p>
+            <h2 className="text-2xl font-bold">
+              ${totalPayroll}
+            </h2>
+          </div>
+
+          <div className="bg-white p-6 rounded-2xl shadow">
+            <p className="text-gray-500">Average Salary</p>
+            <h2 className="text-2xl font-bold">
+              ${averageSalary}
+            </h2>
+          </div>
         </div>
 
-        {isFormOpen && (
-          <SalaryForm
-            employees={employees}
-            record={editingSalary}
-            onSubmit={handleFormSubmit}
-            onClose={() => { setIsFormOpen(false); setEditingSalary(null); }}
+        {/* 🔹 Search */}
+        <div className="flex justify-between items-center mb-6">
+          <input
+            type="text"
+            placeholder="Search employee..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="px-4 py-2 border rounded-lg w-1/3"
           />
-        )}
+        </div>
 
-        <table className="w-full bg-white rounded-xl shadow overflow-hidden">
-          <thead className="bg-[#0e2f44] text-white">
-            <tr>
-              <th className="p-3 text-left">Employee Name</th>
-              <th className="p-3 text-left">Department</th>
-              <th className="p-3 text-left">Salary</th>
-              <th className="p-3 text-left">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {salaries.map((rec) => (
-              <tr key={rec.id} className="border-b hover:bg-gray-50">
-                <td className="p-3">{getEmployeeName(rec.employeeId)}</td>
-                <td className="p-3">{getEmployeeDept(rec.employeeId)}</td>
-                <td className="p-3">${rec.salary}</td>
-                <td className="p-3 space-x-2">
-                  <button
-                    onClick={() => handleEdit(rec)}
-                    className="bg-yellow-400 text-white px-3 py-1 rounded transition"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => handleDelete(rec.id)}
-                    className="bg-red-500 text-white px-3 py-1 rounded transition"
-                  >
-                    Delete
-                  </button>
-                </td>
+        {/* 🔹 Payroll Table */}
+        <div className="bg-white rounded-2xl shadow overflow-hidden">
+          <table className="w-full">
+            <thead className="bg-gray-800 text-white">
+              <tr>
+                <th className="p-4 text-left">Employee</th>
+                <th className="p-4 text-left">Department</th>
+                <th className="p-4 text-left">Basic</th>
+                <th className="p-4 text-left">Allowance</th>
+                <th className="p-4 text-left">Deduction</th>
+                <th className="p-4 text-left">Net Salary</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+
+            <tbody>
+              {filteredEmployees.map((emp) => {
+                const net =
+                  (emp.basicSalary || 0) +
+                  (emp.allowance || 0) -
+                  (emp.deduction || 0);
+
+                return (
+                  <tr
+                    key={emp._id}
+                    className="border-b hover:bg-gray-50"
+                  >
+                    <td className="p-4 font-medium">
+                      {emp.name}
+                    </td>
+                    <td className="p-4">
+                      {emp.department}
+                    </td>
+                    <td className="p-4">
+                      ${emp.basicSalary || 0}
+                    </td>
+                    <td className="p-4">
+                      ${emp.allowance || 0}
+                    </td>
+                    <td className="p-4 text-red-600">
+                      -${emp.deduction || 0}
+                    </td>
+                    <td className="p-4 font-semibold text-green-600">
+                      ${net}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       </div>
+
       <footer className="text-gray-600 py-5 text-center text-sm">
-        © {new Date().getFullYear()} EMS Admin Panel — Salary Management
+        © {new Date().getFullYear()} EMS Admin Panel — Payroll Dashboard
       </footer>
     </div>
-    
   );
 }

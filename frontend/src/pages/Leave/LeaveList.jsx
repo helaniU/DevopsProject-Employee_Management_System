@@ -24,16 +24,20 @@ export default function AdminLeaveRequests() {
     setModal({ open: true, id, action });
   };
 
-  // 🔹 approve/reject action
   const confirmAction = async () => {
-    const { id, action } = modal;
-    try {
-      const res = await axios.put(`http://13.233.73.206:5000/api/admin/leaveRequests/${id}/status`, {
-        status: action === "approve" ? "approved" : "rejected",
-      });
-      setLeaves((prev) =>
-        prev.map((leave) => (leave._id === id ? res.data : leave))
+  const { id, action } = modal;
+
+  try {
+      await axios.put(
+        `http://13.233.73.206:5000/api/admin/leaveRequests/${id}/status`,
+        {
+          status: action === "approve" ? "approved" : "rejected",
+        }
       );
+
+      // Refetch updated leave list
+      await fetchLeaveRequests();
+
     } catch (err) {
       console.error(err);
     } finally {
