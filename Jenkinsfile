@@ -12,13 +12,13 @@ pipeline {
         stage('Build and Deploy') {
             steps {
                 sh '''
-                docker compose down
-                docker compose build --no-cache
-                docker compose up -d
+                docker-compose down --remove-orphans || true
+                docker-compose build --no-cache
+                docker-compose up -d --force-recreate --remove-orphans
                 '''
             }
         }
-
+        
         stage('Verify') {
             steps {
                 sh 'docker ps -a'
