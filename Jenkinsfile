@@ -12,16 +12,14 @@ pipeline {
 
         stage('Build and Deploy') {
             steps {
-                sshagent(['DEPLOY_SSH']) {
-                    sh '''
-                    ssh -o StrictHostKeyChecking=no ec2-user@13.233.73.206 "
-                        cd /home/ec2-user/ems || exit 1 &&
-                        docker-compose down --remove-orphans || true &&
-                        docker-compose build --no-cache frontend &&
-                        docker-compose up -d --force-recreate --remove-orphans
-                    "
-                    '''
-                }
+                sh '''
+                ssh -i /var/lib/jenkins/.ssh/EMS.pem -o StrictHostKeyChecking=no ec2-user@13.233.73.206 "
+                    cd /home/ec2-user/ems || exit 1 &&
+                    docker-compose down --remove-orphans || true &&
+                    docker-compose build --no-cache frontend &&
+                    docker-compose up -d --force-recreate --remove-orphans
+                "
+                '''
             }
         }
         
