@@ -83,7 +83,7 @@ export default function Login() {
         </div>
         <div>
           <p className="text-white font-semibold">
-            Helani - 📞{" "}
+            Contact us - 📞{" "}
             <a
               href="tel:+94771234567"
               className="text-white font-semibold hover:underline"
