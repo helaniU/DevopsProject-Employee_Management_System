@@ -199,7 +199,7 @@ docker compose up -d   # Start all services in background
 ```
 **Services Started:**
 - **Frontend**: localhost:5333 (Nginx serving React app)
-- **Backend**: localhost:5000 (Express API server)
+- **Backend**: 13.233.73.206:5000 (Express API server)
 - **MongoDB**: localhost:27017 (Database)
 
 **Service Dependencies:**

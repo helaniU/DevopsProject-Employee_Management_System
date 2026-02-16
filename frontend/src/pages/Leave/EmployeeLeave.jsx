@@ -15,7 +15,7 @@ export default function EmployeeLeave() {
 
   const fetchLeaves = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/leaveRequests/${userId}`);
+      const res = await axios.get(`http://13.233.73.206:5000/api/leaveRequests/${userId}`);
       setLeaves(res.data);
     } catch (err) {
       console.log("Error fetching leaves:", err);
@@ -48,7 +48,7 @@ export default function EmployeeLeave() {
     }
 
     try {
-      const res = await axios.post("http://localhost:5000/api/leaveRequests", {
+      const res = await axios.post("http://13.233.73.206:5000/api/leaveRequests", {
         userId,
         from: fromDate.toISOString(),
         to: toDate.toISOString(),

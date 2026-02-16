@@ -10,7 +10,7 @@ export default function EmployeeList() {
 
   // ✅ Load employees from MongoDB
   useEffect(() => {
-    fetch("http://localhost:5000/api/employees")
+    fetch("http://13.233.73.206:5000/api/employees")
       .then((res) => res.json())
       .then((data) => setEmployees(data))
       .catch((err) => console.error("Error fetching employees:", err));
@@ -21,14 +21,14 @@ export default function EmployeeList() {
     try {
       if (editingEmployee) {
         // Update existing employee
-        await fetch(`http://localhost:5000/api/employees/${editingEmployee._id}`, {
+        await fetch(`http://13.233.73.206:5000/api/employees/${editingEmployee._id}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(employeeData),
         });
       } else {
         // Add new employee
-        await fetch("http://localhost:5000/api/employees", {
+        await fetch("http://13.233.73.206:5000/api/employees", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(employeeData),
@@ -36,7 +36,7 @@ export default function EmployeeList() {
       }
 
       // Refresh list
-      const updatedList = await fetch("http://localhost:5000/api/employees").then((res) => res.json());
+      const updatedList = await fetch("http://13.233.73.206:5000/api/employees").then((res) => res.json());
       setEmployees(updatedList);
       setIsFormOpen(false);
       setEditingEmployee(null);
@@ -54,7 +54,7 @@ export default function EmployeeList() {
   // ✅ Delete employee (backend)
   const handleDelete = async (id) => {
     try {
-      await fetch(`http://localhost:5000/api/employees/${id}`, {
+      await fetch(`http://13.233.73.206:5000/api/employees/${id}`, {
         method: "DELETE",
       });
       setEmployees(employees.filter((emp) => emp._id !== id));

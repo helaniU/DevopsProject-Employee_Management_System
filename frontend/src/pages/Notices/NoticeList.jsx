@@ -18,7 +18,7 @@ export default function NoticePage() {
 
   const fetchNotices = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/notices");
+      const res = await axios.get("http://13.233.73.206:5000/api/notices");
       setNotices(res.data);
     } catch (error) {
       console.error("Failed to fetch notices", error);
@@ -37,7 +37,7 @@ export default function NoticePage() {
     try {
       if (editingId) {
         // 🟡 Update existing notice
-        await axios.put(`http://localhost:5000/api/notices/${editingId}`, {
+        await axios.put(`http://13.233.73.206:5000/api/notices/${editingId}`, {
           ...form,
           time: currentTime,
         });
@@ -50,7 +50,7 @@ export default function NoticePage() {
         );
       } else {
         // 🟢 Add new notice
-        const res = await axios.post("http://localhost:5000/api/notices", {
+        const res = await axios.post("http://13.233.73.206:5000/api/notices", {
           ...form,
           time: currentTime,
         });
@@ -80,7 +80,7 @@ export default function NoticePage() {
   const confirmDelete = async () => {
   try {
     // Delete from database
-    await axios.delete(`http://localhost:5000/api/notices/${confirmBox.id}`);
+    await axios.delete(`http://13.233.73.206:5000/api/notices/${confirmBox.id}`);
 
     // Then remove from UI
     setNotices((prev) => prev.filter((n) => n._id !== confirmBox.id));

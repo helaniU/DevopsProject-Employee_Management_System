@@ -12,7 +12,7 @@ export default function AdminLeaveRequests() {
 
   const fetchLeaveRequests = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/admin/leaveRequests");
+      const res = await axios.get("http://13.233.73.206:5000/api/admin/leaveRequests");
       setLeaves(res.data);
     } catch (err) {
       console.error(err);
@@ -28,7 +28,7 @@ export default function AdminLeaveRequests() {
   const confirmAction = async () => {
     const { id, action } = modal;
     try {
-      const res = await axios.put(`http://localhost:5000/api/admin/leaveRequests/${id}/status`, {
+      const res = await axios.put(`http://13.233.73.206:5000/api/admin/leaveRequests/${id}/status`, {
         status: action === "approve" ? "approved" : "rejected",
       });
       setLeaves((prev) =>
