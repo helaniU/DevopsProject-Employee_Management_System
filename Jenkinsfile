@@ -6,9 +6,26 @@ pipeline {
     }
 
     stages {
+
+        stage('Cleanup Docker & Frontend') {
+            steps {
+                sshagent(['DEPLOY_SSH']) {
+                    sh """
+                        ssh -o StrictHostKeyChecking=no ec2-user@13.233.73.206 '
+                            cd /home/ec2-user/ems || exit 1
+                            echo "🧹 Cleaning old Docker images/volumes..."
+                            docker system prune -af
+                            docker volume prune -f
+                            echo "🧹 Removing old frontend dist and node_modules..."
+                            rm -rf frontend/dist frontend/node_modules
+                        '
+                    """
+                }
+            }
+        }
+
         stage('Deploy on EC2') {
             steps {
-                // SSH agent must match the ID of the private key added in Jenkins credentials
                 sshagent(['DEPLOY_SSH']) {
                     sh """
                         ssh -o StrictHostKeyChecking=no ec2-user@13.233.73.206 '
