@@ -17,7 +17,7 @@ export default function GetStarted() {
 
         {/* Right side: Contact Number */}
         <div>
-          <p className="text-white font-semibold">Helani - 📞
+          <p className="text-white font-semibold">Contact us - 📞
             <a href="tel:+94771234567" className="text-white font-semibold hover:underline">
               +94 77 123 4567
             </a>
@@ -33,7 +33,7 @@ export default function GetStarted() {
           {/* Left side - Text & Buttons */}
           <div className="w-1/2 flex flex-col justify-center items-center p-10 bg-[#dad0c9]">
             <h2 className="text-3xl font-bold text-[#0e2f44] mb-10 text-center">
-              Helani Umesha
+              Employee Management System
             </h2>
             <p className="text-[#407294] mb-10 text-center font-bold">
               Manage employees efficiently with professional system
